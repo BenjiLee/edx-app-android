@@ -189,9 +189,9 @@ android {
 
     useLibrary 'org.apache.http.legacy'
 
-    dexOptions {
-        javaMaxHeapSize "2g"
-    }
+//    dexOptions {
+//        javaMaxHeapSize "2g"
+//    }
 
     defaultConfig {
         applicationId "org.edx.mobile"
@@ -202,7 +202,7 @@ android {
         versionName "1.0.09"
 
         renderscriptTargetApi 22
-        renderscriptSupportModeEnabled true
+//        renderscriptSupportModeEnabled true
 
         // test configuration
         testApplicationId 'org.edx.mobile.test'
