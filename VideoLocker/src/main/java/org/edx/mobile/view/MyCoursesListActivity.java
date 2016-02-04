@@ -82,7 +82,7 @@ public class MyCoursesListActivity extends BaseSingleFragmentActivity {
     protected void reloadMyCoursesData() {
         CourseListTabFragment fragment = (CourseListTabFragment) getSupportFragmentManager().findFragmentByTag(FIRST_FRAG_TAG);
         if (fragment != null) {
-            fragment.loadData(false, true);
+            fragment.loadData(true, true);
         }
     }
 }

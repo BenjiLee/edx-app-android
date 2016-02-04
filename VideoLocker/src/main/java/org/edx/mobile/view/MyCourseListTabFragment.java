@@ -17,7 +17,6 @@ import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.ISegment;
 import org.edx.mobile.module.facebook.FacebookSessionUtil;
 import org.edx.mobile.module.prefs.PrefManager;
-import org.edx.mobile.services.FetchCourseFriendsService;
 import org.edx.mobile.services.ServiceManager;
 
 import java.util.ArrayList;
@@ -52,14 +51,6 @@ public class MyCourseListTabFragment extends CourseListTabFragment {
     }
 
     protected void loadData(boolean forceRefresh, boolean showProgress) {
-        if (forceRefresh) {
-            Intent clearFriends = new Intent(getActivity(), FetchCourseFriendsService.class);
-
-            clearFriends.putExtra(FetchCourseFriendsService.TAG_FORCE_REFRESH, true);
-
-            getActivity().startService(clearFriends);
-        }
-
         //This Show progress is used to display the progress when a user enrolls in a Course
         if (showProgress && progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -67,7 +58,11 @@ public class MyCourseListTabFragment extends CourseListTabFragment {
 
         Bundle args = new Bundle();
         args.putString(CoursesAsyncLoader.TAG_COURSE_OAUTH, FacebookSessionUtil.getAccessToken());
-        getLoaderManager().restartLoader(MY_COURSE_LOADER_ID, args, this);
+        if (forceRefresh) {
+            getLoaderManager().restartLoader(MY_COURSE_LOADER_ID, args, this);
+        } else {
+            getLoaderManager().initLoader(MY_COURSE_LOADER_ID, args, this);
+        }
     }
 
     @Override
@@ -144,7 +139,7 @@ public class MyCourseListTabFragment extends CourseListTabFragment {
     public void onResume() {
         super.onResume();
         if (refreshOnResume) {
-            loadData(false, true);
+            loadData(true, true);
             refreshOnResume = false;
         }
     }
