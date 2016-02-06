@@ -12,4 +12,10 @@ public class BaseFragment extends RoboFragment {
         super.onCreate(savedInstanceState);
         NewRelic.setInteractionName("Display " + getClass().getSimpleName());
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainApplication.getRefWatcher(getActivity()).watch(this);
+    }
 }

@@ -15,6 +15,8 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.newrelic.agent.android.NewRelic;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import org.edx.mobile.BuildConfig;
 import org.edx.mobile.R;
@@ -55,12 +57,18 @@ public class MainApplication extends MultiDexApplication {
 
     Injector injector;
 
+    private RefWatcher refWatcher;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        refWatcher = LeakCanary.install(this);
         init();
     }
 
+    public static RefWatcher getRefWatcher(Context context) {
+        return ((MainApplication) context.getApplicationContext()).refWatcher;
+    }
     /**
      * Initializes the request manager, image cache,
      * all third party integrations and shared components.
