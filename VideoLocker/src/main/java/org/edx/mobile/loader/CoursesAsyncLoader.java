@@ -7,8 +7,6 @@ import android.support.v4.content.AsyncTaskLoader;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.http.RetroHttpException;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
-import org.edx.mobile.model.api.ProfileModel;
-import org.edx.mobile.module.prefs.PrefManager;
 import org.edx.mobile.user.UserAPI;
 
 import java.util.List;
@@ -43,12 +41,9 @@ public class CoursesAsyncLoader extends AsyncTaskLoader<AsyncTaskResult<List<Enr
     @Override
     public AsyncTaskResult<List<EnrolledCoursesResponse>> loadInBackground() {
 
-        PrefManager pref = new PrefManager(context, PrefManager.Pref.LOGIN);
-        ProfileModel profile = pref.getCurrentUserProfile();
-
         AsyncTaskResult<List<EnrolledCoursesResponse>> result = new AsyncTaskResult<>();
         try {
-            List<EnrolledCoursesResponse> enrolledCoursesResponse = api.getUserEnrolledCourses(profile.username);
+            List<EnrolledCoursesResponse> enrolledCoursesResponse = api.getUserEnrolledCourses();
             environment.getNotificationDelegate().syncWithServerForFailure();
             environment.getNotificationDelegate().checkCourseEnrollment(enrolledCoursesResponse);
             result.setResult(enrolledCoursesResponse);

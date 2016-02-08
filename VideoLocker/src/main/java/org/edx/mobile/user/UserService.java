@@ -29,6 +29,6 @@ public interface UserService {
     @DELETE("/api/user/v1/accounts/{username}/image")
     Response deleteProfileImage(@Path("username") String username) throws RetroHttpException;
 
-    @GET("/api/mobile/v0.5/users/{username}/course_enrollments")
-    List<EnrolledCoursesResponse> getUserEnrolledCourses(@Path("username") String username) throws RetroHttpException;
+    @GET("/api/enrollment/v1/enrollment")
+    List<EnrolledCoursesResponse> getUserEnrolledCourses() throws RetroHttpException;
 }

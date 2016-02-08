@@ -16,15 +16,11 @@ public abstract class GetCourseEnrollmentsTask extends
     @Inject
     private UserAPI userAPI;
 
-    @NonNull
-    private final String username;
-
-    public GetCourseEnrollmentsTask(@NonNull Context context, @NonNull String username) {
+    public GetCourseEnrollmentsTask(@NonNull Context context) {
         super(context);
-        this.username = username;
     }
 
     public List<EnrolledCoursesResponse> call() throws Exception {
-        return userAPI.getUserEnrolledCourses(username);
+        return userAPI.getUserEnrolledCourses();
     }
 }

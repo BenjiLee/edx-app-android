@@ -19,14 +19,11 @@ import org.edx.mobile.exception.AuthException;
 import org.edx.mobile.http.RetroHttpException;
 import org.edx.mobile.loader.AsyncTaskResult;
 import org.edx.mobile.loader.CoursesAsyncLoader;
-import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
-import org.edx.mobile.model.api.ProfileModel;
 import org.edx.mobile.module.analytics.ISegment;
 import org.edx.mobile.module.facebook.FacebookSessionUtil;
 import org.edx.mobile.module.prefs.PrefManager;
 import org.edx.mobile.services.FetchCourseFriendsService;
-import org.edx.mobile.user.GetCourseEnrollmentsTask;
 import org.edx.mobile.user.UserAPI;
 
 import java.util.ArrayList;

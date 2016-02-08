@@ -57,7 +57,7 @@ public class UserAPI {
         EventBus.getDefault().post(new ProfilePhotoUpdatedEvent(username, null));
     }
 
-    public List<EnrolledCoursesResponse> getUserEnrolledCourses(@NonNull String username) throws RetroHttpException {
-        return userService.getUserEnrolledCourses(username);
+    public List<EnrolledCoursesResponse> getUserEnrolledCourses() throws RetroHttpException {
+        return userService.getUserEnrolledCourses();
     }
 }
