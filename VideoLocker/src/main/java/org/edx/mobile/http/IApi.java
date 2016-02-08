@@ -5,18 +5,15 @@ import android.os.Bundle;
 import org.edx.mobile.interfaces.SectionItemInterface;
 import org.edx.mobile.model.api.AnnouncementsModel;
 import org.edx.mobile.model.api.AuthResponse;
-import org.edx.mobile.model.api.CourseInfoModel;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.model.api.HandoutModel;
-import org.edx.mobile.model.api.LectureModel;
 import org.edx.mobile.model.api.ProfileModel;
 import org.edx.mobile.model.api.RegisterResponse;
 import org.edx.mobile.model.api.ResetPasswordResponse;
 import org.edx.mobile.model.api.SectionEntry;
-import org.edx.mobile.model.api.SyncLastAccessedSubsectionResponse;
+import org.edx.mobile.model.api.LastAccessedSubsectionResponse;
 import org.edx.mobile.model.api.VideoResponseModel;
 import org.edx.mobile.module.registration.model.RegistrationDescription;
-import org.edx.mobile.social.SocialFactory;
 import org.edx.mobile.social.SocialMember;
 
 import java.net.HttpCookie;
@@ -27,6 +24,7 @@ import java.util.Map;
 /**
  * TODO - we won't need this api when we fully migrate the code to okhttp
  */
+@Deprecated
 public interface IApi {
     ResetPasswordResponse resetPassword(String emailId)
             throws Exception;
@@ -68,11 +66,6 @@ public interface IApi {
 
     AuthResponse loginByGoogle(String accessToken) throws Exception;
 
-    SyncLastAccessedSubsectionResponse syncLastAccessedSubsection(String courseId,
-                                                                  String lastVisitedModuleId) throws Exception;
-
-    SyncLastAccessedSubsectionResponse getLastAccessedSubsection(String courseId) throws Exception;
-
     RegisterResponse register(Bundle parameters)
             throws Exception;
 
@@ -81,6 +74,9 @@ public interface IApi {
     Boolean enrollInACourse(String courseId, boolean email_opt_in) throws Exception;
 
     List<HttpCookie> getSessionExchangeCookie() throws Exception;
+
+    // TODO remove once UserAPI.syncLastAccessSubsection is implemented
+    LastAccessedSubsectionResponse syncLastAccessedSubsection(String courseId, String lastVisitedModuleId) throws Exception;
 
     @Deprecated
     VideoResponseModel getVideoById(String courseId, String videoId)

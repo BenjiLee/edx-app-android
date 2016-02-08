@@ -4,7 +4,7 @@ import org.edx.mobile.http.model.EnrollmentRequestBody;
 import org.edx.mobile.http.serialization.ShareCourseResult;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.model.api.ProfileModel;
-import org.edx.mobile.model.api.SyncLastAccessedSubsectionResponse;
+import org.edx.mobile.model.api.LastAccessedSubsectionResponse;
 import org.edx.mobile.model.api.VideoResponseModel;
 import org.edx.mobile.model.json.CreateGroupResponse;
 import org.edx.mobile.model.json.SuccessResponse;
@@ -22,11 +22,13 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
+
 import static org.edx.mobile.http.ApiConstants.*;
 
 /**
  * we group all the mobile endpoints which require oauth token together
  */
+@Deprecated
 public interface OauthRestApi {
 
     /* GET calls */
@@ -118,13 +120,13 @@ public interface OauthRestApi {
                                                 @Field("share_with_facebook_friends") String shareWithFriends);
 
     @PUT(URL_LAST_ACCESS_FOR_COURSE)
-    SyncLastAccessedSubsectionResponse syncLastAccessedSubsection(@Body EnrollmentRequestBody.LastAccessRequestBody body,
-                                                                  @Path(USER_NAME) String username,
-                                                                  @Path(COURSE_ID) String courseId);
+    LastAccessedSubsectionResponse syncLastAccessedSubsection(@Body EnrollmentRequestBody.LastAccessRequestBody body,
+                                                              @Path(USER_NAME) String username,
+                                                              @Path(COURSE_ID) String courseId);
 
     @GET(URL_LAST_ACCESS_FOR_COURSE)
-    SyncLastAccessedSubsectionResponse getLastAccessedSubsection( @Path(USER_NAME) String username,
-                                                                  @Path(COURSE_ID) String courseId);
+    LastAccessedSubsectionResponse getLastAccessedSubsection(@Path(USER_NAME) String username,
+                                                             @Path(COURSE_ID) String courseId);
 
 
     @POST(URL_ENROLLMENT)
