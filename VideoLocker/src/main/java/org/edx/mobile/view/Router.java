@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.google.inject.Inject;
@@ -16,8 +16,6 @@ import org.edx.mobile.course.CourseDetail;
 import org.edx.mobile.discussion.DiscussionComment;
 import org.edx.mobile.discussion.DiscussionThread;
 import org.edx.mobile.discussion.DiscussionTopic;
-
-import org.edx.mobile.event.LogoutEvent;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.ISegment;
 import org.edx.mobile.module.notification.NotificationDelegate;
@@ -25,8 +23,6 @@ import org.edx.mobile.module.prefs.PrefManager;
 import org.edx.mobile.util.AppConstants;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.view.dialog.WebViewDialogActivity;
-
-import de.greenrobot.event.EventBus;
 
 @Singleton
 public class Router {
@@ -74,10 +70,7 @@ public class Router {
 
     public void showLaunchScreen(Context context) {
         Intent launchIntent = new Intent(context, LaunchActivity.class);
-        if (context instanceof Activity)
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        else
-            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launchIntent);
     }
 
@@ -93,13 +86,18 @@ public class Router {
         sourceActivity.startActivity(launchIntent);
     }
 
+    public void showMyCoursesAndClearTask(Activity sourceActivity) {
+        sourceActivity.startActivity(MyCoursesListActivity.newIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+
+    }
+
     public void showMyCourses(Activity sourceActivity) {
         sourceActivity.startActivity(MyCoursesListActivity.newIntent());
 
         // let login screens be ended
-        Intent loginIntent = new Intent();
+        /*Intent loginIntent = new Intent();
         loginIntent.setAction(AppConstants.USER_LOG_IN);
-        sourceActivity.sendBroadcast(loginIntent);
+        sourceActivity.sendBroadcast(loginIntent);*/
     }
 
     public void showCourseDashboardTabs(Activity activity, Config config, EnrolledCoursesResponse model,
@@ -268,8 +266,6 @@ public class Router {
         pref.clearAuth();
         pref.put(PrefManager.Key.TRANSCRIPT_LANGUAGE, "none");
 
-        EventBus.getDefault().post(new LogoutEvent());
-
         segment.trackUserLogout();
         segment.resetIdentifyUser();
 
@@ -311,7 +307,7 @@ public class Router {
         if (config.getCourseDiscoveryConfig().isWebviewCourseDiscoveryEnabled()) {
             findCoursesIntent = new Intent(context, WebViewFindCoursesActivity.class);
         } else {
-            findCoursesIntent =  NativeFindCoursesActivity.newIntent(context);
+            findCoursesIntent = NativeFindCoursesActivity.newIntent(context);
         }
         //Add this flag as multiple activities need to be created
         findCoursesIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

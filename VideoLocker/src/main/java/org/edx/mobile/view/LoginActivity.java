@@ -402,7 +402,7 @@ public class LoginActivity extends BaseFragmentActivity implements SocialLoginDe
     private void myCourseScreen() {
         if (isActivityStarted()) {
             // do NOT launch next screen if app minimized
-            environment.getRouter().showMyCourses(this);
+            environment.getRouter().showMyCoursesAndClearTask(this);
             // but finish this screen anyways as login is succeeded
             finish();
         }

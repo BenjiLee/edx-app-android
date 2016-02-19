@@ -318,7 +318,7 @@ public class RegisterActivity extends BaseFragmentActivity
                                 //in the future we will show different messages based on different registration
                                 //condition
                                 showProgress();
-                                environment.getRouter().showMyCourses(RegisterActivity.this);
+                                environment.getRouter().showMyCoursesAndClearTask(RegisterActivity.this);
                                 finish();
                             } else {
                                 RegisterActivity.this.showErrorMessage(null, getString(R.string.sign_up_error));
@@ -554,7 +554,7 @@ public class RegisterActivity extends BaseFragmentActivity
         if (isActivityStarted()) {
             // do NOT launch next screen if app minimized
             showProgress();
-            environment.getRouter().showMyCourses(this);
+            environment.getRouter().showMyCoursesAndClearTask(this);
         }
         // but finish this screen anyways as login is succeeded
         finish();

@@ -21,7 +21,6 @@ import com.google.inject.Inject;
 
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
-import org.edx.mobile.event.LogoutEvent;
 import org.edx.mobile.event.NetworkConnectivityChangeEvent;
 import org.edx.mobile.interfaces.NetworkObserver;
 import org.edx.mobile.interfaces.NetworkSubject;
@@ -176,11 +175,6 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
     protected void onPause() {
         EventBus.getDefault().unregister(this);
         super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -399,16 +393,6 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
      */
     protected boolean isLandscape() {
         return (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
-    }
-
-
-    /**
-     * callback from EventBus
-     *
-     * @param event
-     */
-    public void onEvent(LogoutEvent event) {
-        finish();
     }
 
     /**
