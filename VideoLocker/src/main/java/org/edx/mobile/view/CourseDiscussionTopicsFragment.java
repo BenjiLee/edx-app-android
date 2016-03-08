@@ -134,9 +134,10 @@ public class CourseDiscussionTopicsFragment extends BaseFragment {
             public void onSuccess(CourseTopics courseTopics) {
                 if (courseTopics != null) {
                     logger.debug("GetTopicListTask success=" + courseTopics);
+                    //  hideProgress();
                     ArrayList<DiscussionTopic> allTopics = new ArrayList<>();
-                    allTopics.addAll(courseTopics.getNonCoursewareTopics());
                     allTopics.addAll(courseTopics.getCoursewareTopics());
+                    allTopics.addAll(courseTopics.getNonCoursewareTopics());
 
                     List<DiscussionTopicDepth> allTopicsWithDepth = DiscussionTopicDepth.createFromDiscussionTopics(allTopics);
                     discussionTopicsAdapter.setItems(allTopicsWithDepth);
@@ -147,6 +148,7 @@ public class CourseDiscussionTopicsFragment extends BaseFragment {
             @Override
             public void onException(Exception ex) {
                 logger.error(ex);
+                //  hideProgress();
             }
         };
         getTopicListTask.execute();

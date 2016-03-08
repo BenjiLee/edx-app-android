@@ -44,16 +44,17 @@ public class UserProfilePresenter extends ViewHoldingPresenter<UserProfilePresen
         super.attachView(view);
         view.setName(username);
         view.setEditProfileMenuButtonVisible(isViewingOwnProfile);
-        view.setContent(ViewInterface.ContentType.LOADING);
+        view.setProfile(new ViewInterface.UserProfileViewModel(ViewInterface.LimitedProfileMessage.NONE, null, null, ViewInterface.ContentType.LOADING, null));
         observeOnView(userProfileInteractor.observeAccount()).subscribe(new Observer<Account>() {
             @Override
             public void onData(@NonNull Account account) {
                 final ViewInterface.LimitedProfileMessage limitedProfileMessage;
+                String languageName = null;
+                String countryName = null;
                 if (account.requiresParentalConsent() || account.getAccountPrivacy() == Account.Privacy.PRIVATE) {
                     limitedProfileMessage = isViewingOwnProfile ? ViewInterface.LimitedProfileMessage.OWN_PROFILE : ViewInterface.LimitedProfileMessage.OTHER_USERS_PROFILE;
                 } else {
                     limitedProfileMessage = ViewInterface.LimitedProfileMessage.NONE;
-                    String languageName = null;
                     if (!account.getLanguageProficiencies().isEmpty()) {
                         try {
                             languageName = LocaleUtils.getLanguageNameFromCode(account.getLanguageProficiencies().get(0).getCode());
@@ -61,9 +62,7 @@ public class UserProfilePresenter extends ViewHoldingPresenter<UserProfilePresen
                             logger.error(e, true);
                         }
                     }
-                    view.setLanguage(languageName);
 
-                    String countryName = null;
                     if (!TextUtils.isEmpty(account.getCountry())) {
                         try {
                             countryName = LocaleUtils.getCountryNameFromCode(account.getCountry());
@@ -71,9 +70,7 @@ public class UserProfilePresenter extends ViewHoldingPresenter<UserProfilePresen
                             logger.error(e, true);
                         }
                     }
-                    view.setLocation(countryName);
                 }
-                view.setLimitedProfileMessage(limitedProfileMessage);
 
                 final ViewInterface.ContentType contentType;
                 if (isViewingOwnProfile && account.requiresParentalConsent()) {
@@ -87,17 +84,16 @@ public class UserProfilePresenter extends ViewHoldingPresenter<UserProfilePresen
                         contentType = ViewInterface.ContentType.NO_ABOUT_ME;
                     } else {
                         contentType = ViewInterface.ContentType.ABOUT_ME;
-                        view.setAboutMeText(account.getBio());
                     }
                 } else {
                     contentType = ViewInterface.ContentType.EMPTY;
                 }
-                view.setContent(contentType);
+                view.setProfile(new ViewInterface.UserProfileViewModel(limitedProfileMessage, languageName, countryName, contentType, account.getBio()));
             }
 
             @Override
             public void onError(@NonNull Throwable error) {
-                view.setContent(ViewInterface.ContentType.EMPTY);
+                view.setProfile(new ViewInterface.UserProfileViewModel(ViewInterface.LimitedProfileMessage.NONE, null, null, ViewInterface.ContentType.EMPTY, null));
                 view.showError(error);
             }
         });
@@ -128,15 +124,7 @@ public class UserProfilePresenter extends ViewHoldingPresenter<UserProfilePresen
     public interface ViewInterface {
         void setEditProfileMenuButtonVisible(boolean visible);
 
-        void setLimitedProfileMessage(@NonNull LimitedProfileMessage message);
-
-        void setLanguage(@Nullable String languageText);
-
-        void setLocation(@Nullable String locationText);
-
-        void setContent(@NonNull ContentType contentType);
-
-        void setAboutMeText(@NonNull String bio);
+        void setProfile(@NonNull UserProfileViewModel profile);
 
         void showError(@NonNull Throwable error);
 
@@ -145,6 +133,42 @@ public class UserProfilePresenter extends ViewHoldingPresenter<UserProfilePresen
         void setName(@NonNull String name);
 
         void navigateToProfileEditor(@NonNull String username);
+
+        class UserProfileViewModel {
+            @NonNull
+            public final LimitedProfileMessage limitedProfileMessage;
+
+            @Nullable
+            public final String language;
+
+            @Nullable
+            public final String location;
+
+            @NonNull
+            public final ContentType contentType;
+
+            @Nullable
+            public final String bio;
+
+            public UserProfileViewModel(@NonNull LimitedProfileMessage message, @Nullable String language, @Nullable String location, @NonNull ContentType contentType, @Nullable String bio) {
+                limitedProfileMessage = message;
+                this.language = language;
+                this.location = location;
+                this.contentType = contentType;
+                this.bio = bio;
+            }
+
+            @Override
+            public String toString() {
+                return "UserProfileViewModel{" +
+                        "limitedProfileMessage=" + limitedProfileMessage +
+                        ", language='" + language + '\'' +
+                        ", location='" + location + '\'' +
+                        ", contentType=" + contentType +
+                        ", bio='" + bio + '\'' +
+                        '}';
+            }
+        }
 
         enum LimitedProfileMessage {
             NONE,

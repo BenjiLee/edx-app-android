@@ -105,50 +105,38 @@ public class UserProfileFragment extends PresenterFragment<UserProfilePresenter,
                 setHasOptionsMenu(visible);
             }
 
-            public void setLimitedProfileMessage(@NonNull LimitedProfileMessage message) {
-                if (message == LimitedProfileMessage.NONE) {
+            @Override
+            public void setProfile(@NonNull UserProfileViewModel profile) {
+                if (profile.limitedProfileMessage == LimitedProfileMessage.NONE) {
                     viewHolder.sharingLimited.setVisibility(View.GONE);
                 } else {
                     viewHolder.sharingLimited.setVisibility(View.VISIBLE);
-                    viewHolder.sharingLimited.setText(message == LimitedProfileMessage.OWN_PROFILE
+                    viewHolder.sharingLimited.setText(profile.limitedProfileMessage == LimitedProfileMessage.OWN_PROFILE
                             ? R.string.profile_sharing_limited_by_you
                             : R.string.profile_sharing_limited_by_other_user);
                 }
-            }
 
-            @Override
-            public void setLanguage(@Nullable String language) {
-                if (TextUtils.isEmpty(language)) {
+                if (TextUtils.isEmpty(profile.language)) {
                     viewHolder.languageContainer.setVisibility(View.GONE);
                 } else {
-                    viewHolder.languageText.setText(language);
+                    viewHolder.languageText.setText(profile.language);
                     viewHolder.languageContainer.setVisibility(View.VISIBLE);
                 }
-            }
 
-            @Override
-            public void setLocation(@Nullable String location) {
-                if (TextUtils.isEmpty(location)) {
+                if (TextUtils.isEmpty(profile.location)) {
                     viewHolder.locationContainer.setVisibility(View.GONE);
                 } else {
-                    viewHolder.locationText.setText(location);
+                    viewHolder.locationText.setText(profile.location);
                     viewHolder.locationContainer.setVisibility(View.VISIBLE);
                 }
-            }
 
-            @Override
-            public void setContent(@NonNull final ContentType contentType) {
-                viewHolder.profileBodyContent.setBackgroundColor(getResources().getColor(contentType == ContentType.ABOUT_ME ? R.color.white : R.color.edx_grayscale_neutral_xx_light));
-                viewHolder.parentalConsentRequired.setVisibility(contentType == ContentType.PARENTAL_CONSENT_REQUIRED ? View.VISIBLE : View.GONE);
-                viewHolder.incompleteContainer.setVisibility(contentType == ContentType.INCOMPLETE ? View.VISIBLE : View.GONE);
-                viewHolder.noAboutMe.setVisibility(contentType == ContentType.NO_ABOUT_ME ? View.VISIBLE : View.GONE);
-                viewHolder.bioText.setVisibility(contentType == ContentType.ABOUT_ME ? View.VISIBLE : View.GONE);
-                viewHolder.loadingIndicator.setVisibility(contentType == ContentType.LOADING ? View.VISIBLE : View.GONE);
-            }
-
-            @Override
-            public void setAboutMeText(@NonNull String bio) {
-                viewHolder.bioText.setText(bio);
+                viewHolder.profileBodyContent.setBackgroundColor(getResources().getColor(profile.contentType == ContentType.ABOUT_ME ? R.color.white : R.color.edx_grayscale_neutral_xx_light));
+                viewHolder.parentalConsentRequired.setVisibility(profile.contentType == ContentType.PARENTAL_CONSENT_REQUIRED ? View.VISIBLE : View.GONE);
+                viewHolder.incompleteContainer.setVisibility(profile.contentType == ContentType.INCOMPLETE ? View.VISIBLE : View.GONE);
+                viewHolder.noAboutMe.setVisibility(profile.contentType == ContentType.NO_ABOUT_ME ? View.VISIBLE : View.GONE);
+                viewHolder.bioText.setVisibility(profile.contentType == ContentType.ABOUT_ME ? View.VISIBLE : View.GONE);
+                viewHolder.loadingIndicator.setVisibility(profile.contentType == ContentType.LOADING ? View.VISIBLE : View.GONE);
+                viewHolder.bioText.setText(profile.bio);
             }
 
             @Override

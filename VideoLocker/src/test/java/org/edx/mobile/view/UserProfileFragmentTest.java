@@ -31,7 +31,7 @@ public class UserProfileFragmentTest extends PresenterFragmentTest<UserProfileFr
     public void setUsername_withNonEmptyString_updatesTextView() {
         final String text = "hello";
         view.setName(text);
-        assertThat(binding.usernameText.getText().toString(), is(text));
+        assertThat(binding.nameText.getText().toString(), is(text));
     }
 
     @Test
@@ -48,7 +48,12 @@ public class UserProfileFragmentTest extends PresenterFragmentTest<UserProfileFr
 
     @Test
     public void showLoadingIndicator_showsLoadingIndicatorAndHidesContent() {
-        view.setContent(UserProfilePresenter.ViewInterface.ContentType.LOADING);
+        view.setProfile(new UserProfilePresenter.ViewInterface.UserProfileViewModel(
+                UserProfilePresenter.ViewInterface.LimitedProfileMessage.NONE,
+                null,
+                null,
+                UserProfilePresenter.ViewInterface.ContentType.LOADING,
+                null));
         assertThat(binding.loadingIndicator.getVisibility(), is(View.VISIBLE));
     }
 

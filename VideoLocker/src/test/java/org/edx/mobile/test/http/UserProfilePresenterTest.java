@@ -57,7 +57,12 @@ public class UserProfilePresenterTest extends PresenterTest<UserProfilePresenter
     public void whenNoAboutMeReturned_withAnonymousUser_showsNoAboutMeContent() {
         configureBareMockAccount();
         createPresenter();
-        verify(view).setContent(UserProfilePresenter.ViewInterface.ContentType.NO_ABOUT_ME);
+        verify(view).setProfile(refEq(new UserProfilePresenter.ViewInterface.UserProfileViewModel(
+                UserProfilePresenter.ViewInterface.LimitedProfileMessage.NONE,
+                null,
+                null,
+                UserProfilePresenter.ViewInterface.ContentType.NO_ABOUT_ME,
+                null)));
     }
 
     @Test
@@ -66,7 +71,12 @@ public class UserProfilePresenterTest extends PresenterTest<UserProfilePresenter
         final Account account = configureBareMockAccount();
         when(account.requiresParentalConsent()).thenReturn(true);
         createPresenter();
-        verify(view).setContent(UserProfilePresenter.ViewInterface.ContentType.PARENTAL_CONSENT_REQUIRED);
+        verify(view).setProfile(refEq(new UserProfilePresenter.ViewInterface.UserProfileViewModel(
+                UserProfilePresenter.ViewInterface.LimitedProfileMessage.NONE,
+                null,
+                null,
+                UserProfilePresenter.ViewInterface.ContentType.PARENTAL_CONSENT_REQUIRED,
+                null)));
     }
 
     @Test
@@ -74,7 +84,12 @@ public class UserProfilePresenterTest extends PresenterTest<UserProfilePresenter
         final Account account = configureBareMockAccount();
         when(account.requiresParentalConsent()).thenReturn(true);
         createPresenter();
-        verify(view).setContent(UserProfilePresenter.ViewInterface.ContentType.NO_ABOUT_ME);
+        verify(view).setProfile(refEq(new UserProfilePresenter.ViewInterface.UserProfileViewModel(
+                UserProfilePresenter.ViewInterface.LimitedProfileMessage.NONE,
+                null,
+                null,
+                UserProfilePresenter.ViewInterface.ContentType.NO_ABOUT_ME,
+                null)));
     }
 
     @Test

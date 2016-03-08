@@ -25,6 +25,7 @@ public class TopicSpinnerAdapter extends ArrayAdapter<DiscussionTopicDepth> {
 
     public TopicSpinnerAdapter(@NonNull Context context, @NonNull List<DiscussionTopicDepth> objects) {
         super(context, 0, new ArrayList<DiscussionTopicDepth>());
+        add(null); // Represents "Choose a topic..." placeholder
         addAll(objects);
     }
 
@@ -37,9 +38,13 @@ public class TopicSpinnerAdapter extends ArrayAdapter<DiscussionTopicDepth> {
             view = (TextView) convertView;
         }
         final DiscussionTopicDepth topic = getItem(position);
-        view.setText(ResourceUtil.getFormattedString(getContext().getResources(),
-                R.string.discussion_add_post_topic_selection, "topic",
-                topic.getDiscussionTopic().getName()));
+        final CharSequence text;
+        if (null == topic) {
+            text = getContext().getString(R.string.discussion_add_post_choose_a_topic);
+        } else {
+            text = ResourceUtil.getFormattedString(getContext().getResources(), R.string.discussion_add_post_topic_selection, "topic", topic.getDiscussionTopic().getName());
+        }
+        view.setText(text);
         return view;
     }
 
@@ -52,10 +57,17 @@ public class TopicSpinnerAdapter extends ArrayAdapter<DiscussionTopicDepth> {
             view = (TextView) convertView;
         }
         final DiscussionTopicDepth topic = getItem(position);
-        final int extraLeftPadding = topic.getDepth() * extraPaddingPerLevel;
-        ViewCompat.setPaddingRelative(view, basePadding + extraLeftPadding, view.getPaddingTop(),
-                basePadding, view.getPaddingBottom());
-        view.setText(topic.getDiscussionTopic().getName());
+        final int extraLeftPadding;
+        final String text;
+        if (null == topic) {
+            extraLeftPadding = 0;
+            text = getContext().getString(R.string.discussion_add_post_choose_a_topic);
+        } else {
+            extraLeftPadding = topic.getDepth() * extraPaddingPerLevel;
+            text = topic.getDiscussionTopic().getName();
+        }
+        ViewCompat.setPaddingRelative(view, basePadding + extraLeftPadding, view.getPaddingTop(), basePadding, view.getPaddingBottom());
+        view.setText(text);
         view.setEnabled(isEnabled(position));
         return view;
     }
@@ -75,12 +87,12 @@ public class TopicSpinnerAdapter extends ArrayAdapter<DiscussionTopicDepth> {
      * @return The position of the specified topic, or -1 if not found
      */
     public int getPosition(@NonNull DiscussionTopic discussionTopic) {
-        for (int i = 0; i < getCount(); ++i) {
-            final DiscussionTopicDepth item = getItem(i);
-            if (item.isPostable() && discussionTopic.hasSameId(item.getDiscussionTopic())) {
-                return i;
+            for (int i = 0; i < getCount(); ++i) {
+                final DiscussionTopicDepth item = getItem(i);
+                if (null != item && item.isPostable() && discussionTopic.hasSameId(item.getDiscussionTopic())) {
+                    return i;
+                }
             }
-        }
         return -1;
     }
 }
